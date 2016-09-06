@@ -29,8 +29,13 @@ def index():
             string = name.decode('utf-8')
             flash(string)
         session['name'] = form.name.data
+        #把每次post请求重定向成get请求,避免刷新页面的时候要求重新提交表单
         return redirect(url_for('main.index'))
     user_agent = request.headers.get('User-Agent')
     form.name.data = ''
     return render_template('index.html', current_time = datetime.utcnow(), name = session.get('name'),
                            form = form, know = session.get('know', False)) + " " + user_agent
+
+@main.route('/users/<name>')
+def user(name):
+    return render_template('user.html', name = name)
